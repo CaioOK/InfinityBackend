@@ -1,43 +1,47 @@
+'use strict';
+
 module.exports = {
   async up (queryInterface, Sequelize) {
-    return queryInterface.createTable('Users', {
+    return queryInterface.createTable('Stores', {
       id: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
         allowNull: false,
+        primaryKey: true,
         autoIncrement: true,
       },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
-
+        unique: true,
       },
-      phone: {
+      description: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      email: {
+      localization: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
       },
-      cpf: {
+      categoryId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        field: 'category_id',
+        references: {
+          model: 'Categories',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      logo: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
       },
-      password: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      perfil: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-    })
+    });
   },
 
   async down (queryInterface, _Sequelize) {
-    return queryInterface.dropTable('Users');
+    return queryInterface.dropTable('Stores');
   }
 };
