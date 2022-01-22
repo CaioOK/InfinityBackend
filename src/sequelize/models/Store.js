@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: true,
     },
     logo: DataTypes.STRING,
+  },
+  {
+    timestamps: false,
+    tableName: 'Stores',
+    underscored: true,
   });
 
   Store.associate = (models) => {
