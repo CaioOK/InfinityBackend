@@ -26,13 +26,16 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      password: {
-        type: Sequelize.STRING,
+      profileId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-      },
-      perfil: {
-        type: Sequelize.STRING,
-        allowNull: true,
+        field: 'profile_id',
+        references: {
+          model: 'Profiles',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
     });
   },

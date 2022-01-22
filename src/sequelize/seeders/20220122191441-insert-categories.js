@@ -1,5 +1,5 @@
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up (queryInterface, _Sequelize) {
     return queryInterface.bulkInsert('Categories',[
       {
         id: 1,
