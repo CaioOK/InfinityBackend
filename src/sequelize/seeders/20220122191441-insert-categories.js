@@ -3,7 +3,7 @@ module.exports = {
     return queryInterface.bulkInsert('Categories',[
       {
         id: 1,
-        name: 'Varejo',
+        name: 'Departamento',
       },
       {
         id: 2,
