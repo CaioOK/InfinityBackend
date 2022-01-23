@@ -10,12 +10,22 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     cpf: DataTypes.STRING,
     password: DataTypes.STRING,
-    perfil: DataTypes.STRING,
+    profileId: {
+      type: DataTypes.INTEGER,
+      foreignKey: true,
+    }
   },
   {
     timestamps: false,
     tableName: 'Users',
+    underscored: true,
   });
 
+  User.associate = (models) => {
+    User.belongsTo(models.Profile, {
+      foreignKey: 'profile_id',
+      as: 'profile',
+    });
+  }
   return User;
 };
