@@ -1,5 +1,5 @@
 module.exports = {
-  async up (queryInterface, _Sequelize) {
+  async up (queryInterface, Sequelize) {
     return queryInterface.bulkInsert('Profiles', [
       {
         id: 1,
