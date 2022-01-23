@@ -28,3 +28,5 @@ app.post('/login', login);
 app.use(errorMiddleware);
 
 app.listen(PORT, () => console.log(`Server running at port: ${PORT}`));
+
+module.exports = app;
