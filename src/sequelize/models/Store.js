@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
     logo: DataTypes.STRING,
   },
   {
-    timestamps: false,
     tableName: 'Stores',
     underscored: true,
   });
