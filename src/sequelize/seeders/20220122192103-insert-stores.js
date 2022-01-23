@@ -9,8 +9,8 @@ module.exports = {
         localization: '-18.920579805819322, -48.279375254693505',
         category_id: 1,
         logo: 'https://tm.ibxk.com.br/2021/04/14/14102931597147.jpg?ims=1120x420',
-        createdAt: Sequelize.literal('CURRENT_TIMESTAMP'),
-        updatedAt: Sequelize.literal('CURRENT_TIMESTAMP'),
+        created_at: Sequelize.literal('CURRENT_TIMESTAMP'),
+        updated_at: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       {
         id: 2,
@@ -20,8 +20,8 @@ module.exports = {
         localization: '-18.908767839079005, -48.26116555981498',
         category_id: 3,
         logo: 'https://tm.ibxk.com.br/2021/04/14/14102931597147.jpg?ims=1120x420',
-        createdAt: Sequelize.literal('CURRENT_TIMESTAMP'),
-        updatedAt: Sequelize.literal('CURRENT_TIMESTAMP'),
+        created_at: Sequelize.literal('CURRENT_TIMESTAMP'),
+        updated_at: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       {
         id: 3,
@@ -31,8 +31,8 @@ module.exports = {
         localization: '-18.89814395042913, -48.262246777005394',
         category_id: 2,
         logo: 'https://ruraltech.net.br/data/upload/logo/logomarca.png',
-        createdAt: Sequelize.literal('CURRENT_TIMESTAMP'),
-        updatedAt: Sequelize.literal('CURRENT_TIMESTAMP'),
+        created_at: Sequelize.literal('CURRENT_TIMESTAMP'),
+        updated_at: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     ]);
   },
