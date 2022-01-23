@@ -8,7 +8,13 @@ const invalidToken = {
   httpCode: 'unauthorized',
 };
 
+const invalidUserNameOrPassword = {
+  message: 'Username or password incorrect',
+  httpCode: 'badRequest',
+};
+
 module.exports = {
   tokenNotFound,
   invalidToken,
+  invalidUserNameOrPassword,
 };
