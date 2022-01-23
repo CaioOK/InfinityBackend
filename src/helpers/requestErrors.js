@@ -13,8 +13,14 @@ const invalidUserNameOrPassword = {
   httpCode: 'badRequest',
 };
 
+const userAlreadyRegistered = {
+  message: 'User already registered',
+  httpCode: 'conflict',
+};
+
 module.exports = {
   tokenNotFound,
   invalidToken,
   invalidUserNameOrPassword,
+  userAlreadyRegistered,
 };

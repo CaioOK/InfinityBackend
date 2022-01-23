@@ -4,6 +4,7 @@ const rescue = require('express-rescue');
 const { Profile } = require('../sequelize/models');
 const {
   invalidUserNameOrPassword,
+  userAlreadyRegistered,
 } = require('../helpers/requestErrors');
 
 require('dotenv').config();
@@ -39,7 +40,7 @@ const createProfile = rescue(async (req, res, next) => {
 
     res.status(201).json({ id, userName, role, token });
   } catch (err) {
-    console.log(err);
+    if (err.errors[0].type === 'unique violation') return next(userAlreadyRegistered);
 
     next(err);
   }
