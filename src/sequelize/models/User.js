@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
     phone: DataTypes.STRING,
     email: DataTypes.STRING,
     cpf: DataTypes.STRING,
-    password: DataTypes.STRING,
     profileId: {
       type: DataTypes.INTEGER,
       foreignKey: true,
