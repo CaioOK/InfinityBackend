@@ -1,4 +1,3 @@
-const Joi = require('joi');
 const rescue = require('express-rescue');
 const { Profile } = require('../sequelize/models');
 const { tokenGenerator } = require('../helpers/tokenHandler');
@@ -6,16 +5,10 @@ const {
   invalidUserNameOrPassword,
   userAlreadyRegistered,
 } = require('../helpers/requestErrors');
-
-const profileSchema = Joi.object({
-  userName: Joi.string().alphanum().min(3).required(),
-  password: Joi.string().min(6).required(),
-});
-
-const loginSchema = Joi.object({
-  userName: Joi.string().not().empty().required(),
-  password: Joi.string().not().empty().required(),
-});
+const {
+  profileSchema,
+  loginSchema,
+} = require('../helpers/joiSchemas');
 
 const createProfile = rescue(async (req, res, next) => {
   const { userName, password } = req.body;
