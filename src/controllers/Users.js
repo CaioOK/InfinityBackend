@@ -1,15 +1,11 @@
-const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 const rescue = require('express-rescue');
 const { Profile } = require('../sequelize/models');
+const { tokenGenerator } = require('../helpers/tokenHandler');
 const {
   invalidUserNameOrPassword,
   userAlreadyRegistered,
 } = require('../helpers/requestErrors');
-
-require('dotenv').config();
-
-const { JWT_SECRET } = process.env;
 
 const profileSchema = Joi.object({
   userName: Joi.string().alphanum().min(3).required(),
@@ -31,12 +27,7 @@ const createProfile = rescue(async (req, res, next) => {
   try {
     const { id, role } = await Profile.create({ userName, password });
 
-    const jwtConfig = {
-      expiresIn: '1d',
-      algorithm: 'HS256',
-    };
-
-    const token = jwt.sign({ id, userName, role }, JWT_SECRET, jwtConfig);
+    const token = tokenGenerator({ id, userName, role });
 
     res.status(201).json({ id, userName, role, token });
   } catch (err) {
@@ -59,12 +50,7 @@ const login = rescue(async (req, res, next) => {
 
   const { id, role } = profile;
 
-  const jwtConfig = {
-    expiresIn: '1d',
-    algorithm: 'HS256',
-  };
-
-  const token = jwt.sign({ id, userName, role }, JWT_SECRET, jwtConfig);
+  const token = tokenGenerator({ id, userName, role });
 
   return res.status(200).json({ token });
 });
