@@ -1,5 +1,5 @@
 const rescue = require('express-rescue');
-const { Profile } = require('../sequelize/models');
+const { Profile, User } = require('../sequelize/models');
 const { tokenGenerator } = require('../helpers/tokenHandler');
 const {
   invalidUserNameOrPassword,
@@ -8,6 +8,7 @@ const {
 const {
   profileSchema,
   loginSchema,
+  newUserSchema,
 } = require('../helpers/joiSchemas');
 
 const createProfile = rescue(async (req, res, next) => {
@@ -48,7 +49,21 @@ const login = rescue(async (req, res, next) => {
   return res.status(200).json({ token });
 });
 
+const createUser = rescue(async (req, res, next) => {
+  const { name, phone, email, cpf } = req.body;
+  const { id: profileId } = req.user;
+
+  const { error } = newUserSchema.validate(req.body);
+
+  if (error) return next(error);
+
+  const newUser = await User.create({ name, phone, email, cpf, profileId });
+
+  return res.status(201).json(newUser);
+});
+
 module.exports = {
   createProfile,
   login,
+  createUser,
 };

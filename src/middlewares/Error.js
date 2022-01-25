@@ -9,16 +9,25 @@ const httpErrorHandler = {
 
 module.exports = async (err, _req, res, _next) => {
   if (err.isJoi) {
-    const { message } = err.details[0];
+    const { message, context: { key } } = err.details[0];
 
-    return res.status(400).json({ message });
+    if (key === 'cpf') {
+      return httpErrorHandler.unprocessableEntity(
+        'The CPF must be in the format XXX.XXX.XXX-XX',
+        res,
+      );
+    }
+
+    if (key === 'phone') return httpErrorHandler.unprocessableEntity('Incorrect phone format', res);
+
+    return httpErrorHandler.badRequest(message, res);
   }
 
-  if (err.sql) {
-    console.log(err);
+  // if (err.sql) {
+  //   console.log(err);
 
-    return res.status(400).json(err);
-  }
-  
+  //   return res.status(400).json(err);
+  // }
+
   return httpErrorHandler[err.httpCode](err.message, res);
 };

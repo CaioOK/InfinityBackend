@@ -4,10 +4,11 @@ const bodyParser = require('body-parser');
 const {
   createProfile,
   login,
+  createUser,
 } = require('./src/controllers/Users');
 
 const errorMiddleware = require('./src/middlewares/Error');
-// const authMiddleware = require('./src/middlewares/Auth');
+const authMiddleware = require('./src/middlewares/Auth');
 
 require('dotenv').config();
 
@@ -24,6 +25,8 @@ app.get('/', (_req, res) => {
 app.post('/profile/new', createProfile);
 
 app.post('/login', login);
+
+app.post('/user/new', authMiddleware, createUser);
 
 app.use(errorMiddleware);
 
