@@ -7,12 +7,12 @@ const phoneRegExp = new RegExp(
 const cpfRegExp = new RegExp(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/);
 
 const profileSchema = Joi.object({
-  userName: Joi.string().alphanum().min(3).required(),
+  email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
 });
 
 const loginSchema = Joi.object({
-  userName: Joi.string().not().empty().required(),
+  email: Joi.string().email().required(),
   password: Joi.string().not().empty().required(),
 });
 

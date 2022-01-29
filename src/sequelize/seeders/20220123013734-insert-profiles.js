@@ -3,7 +3,7 @@ module.exports = {
     return queryInterface.bulkInsert('Profiles', [
       {
         id: 1,
-        user_name: 'mrrobot',
+        email: 'mrrobot@ecorp.us',
         password: 'tyrellpenosaco',
         role: 'admin',
         created_at: Sequelize.literal('CURRENT_TIMESTAMP'),
@@ -11,7 +11,7 @@ module.exports = {
       },
       {
         id: 2,
-        user_name: 'yudi',
+        email: 'yudihiphop@gmail.com',
         password: 'playstation2',
         role: 'user',
         created_at: Sequelize.literal('CURRENT_TIMESTAMP'),

@@ -14,8 +14,8 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 const newProfile = {
-	userName: 'Xablau',
-	password: '123456'
+	email: 'xablau@email.com',
+	password: '123456',
 };
 
 const consoleLogStub = stub(console, 'log');
@@ -45,19 +45,19 @@ describe('Enpoint POST /profile/new', () => {
       expect(status).to.be.equals(201);
     });
 
-    it('retorna o userName que foi cadastrado e a role como \"user\"', async () => {
-      const { body: { userName, role } } = postNewProfile;
+    it('retorna o email que foi cadastrado e a role como \"user\"', async () => {
+      const { body: { email, role } } = postNewProfile;
 
-      expect(userName).to.be.equals(newProfile.userName);
+      expect(email).to.be.equals(newProfile.email);
       expect(role).to.be.equals('user');
     });
 
-    it('também retorna um token jwt válido com o userName e role', async () => {
+    it('também retorna um token jwt válido com o email e role', async () => {
       const { body: { token } } = postNewProfile;
 
-      const { userName, role } = jwt.verify(token, JWT_SECRET);
+      const { email, role } = jwt.verify(token, JWT_SECRET);
 
-      expect(userName).to.be.equals(newProfile.userName);
+      expect(email).to.be.equals(newProfile.email);
       expect(role).to.be.equals('user');
     });
   });
@@ -90,48 +90,48 @@ describe('Enpoint POST /profile/new', () => {
   });
 
   describe('quando os dados são inválidos retorna:', () => {
-    let postNewProfileIncorrectUsernameType;
+    let postNewProfileIncorrectEmailType;
     let postNewProfileIncorrectPasswordType;
-    let postNewProfileWithoutUsername;
+    let postNewProfileWithoutEmail;
     let postNewProfileWithoutPassword;
-    let postNewProfileEmptyUsername;
+    let postNewProfileEmptyEmail;
     let postNewProfileEmptyPassword;
-    let postNewProfileUsernameLessThan3Chars;
+    let postNewProfileIncorrectEmailFormat;
     let postNewProfilePasswordLessThan6Chars;
 
     before(async () => {
       try {
-        postNewProfileIncorrectUsernameType = await chai.request(app)
+        postNewProfileIncorrectEmailType = await chai.request(app)
           .post('/profile/new')
-          .send({ userName: 123421, password: '123456' });
+          .send({ email: 123421, password: newProfile.password });
         
         postNewProfileIncorrectPasswordType = await chai.request(app)
           .post('/profile/new')
-          .send({ userName: 'xablau', password: 1234567 });
+          .send({ email: newProfile.email, password: 1234567 });
 
-        postNewProfileWithoutUsername = await chai.request(app)
+        postNewProfileWithoutEmail = await chai.request(app)
           .post('/profile/new')
-          .send({ password: '123456' });
+          .send({ password: newProfile.password });
 
         postNewProfileWithoutPassword = await chai.request(app)
           .post('/profile/new')
-          .send({ userName: 'xablau' });
+          .send({ email: newProfile.email });
         
-        postNewProfileEmptyUsername = await chai.request(app)
+        postNewProfileEmptyEmail = await chai.request(app)
           .post('/profile/new')
-          .send({ userName: '', password: '123456' });
+          .send({ email: '', password: newProfile.password });
 
         postNewProfileEmptyPassword = await chai.request(app)
           .post('/profile/new')
-          .send({ userName: 'xablau', password: '' });
+          .send({ email: newProfile.email, password: '' });
 
-        postNewProfileUsernameLessThan3Chars = await chai.request(app)
+        postNewProfileIncorrectEmailFormat = await chai.request(app)
           .post('/profile/new')
-          .send({ userName: 'oi', password: '123456' });
+          .send({ email: 'xablauemail.com', password: newProfile.password });
 
         postNewProfilePasswordLessThan6Chars = await chai.request(app)
           .post('/profile/new')
-          .send({ userName: 'xablau', password: '12345' });
+          .send({ email: newProfile.email, password: '12345' });
       
       } catch (err) {
         console.error(err.message);
@@ -139,16 +139,16 @@ describe('Enpoint POST /profile/new', () => {
     });
 
     it('status 400 - Bad Request', async () => {
-      const { status } = postNewProfileIncorrectUsernameType;
+      const { status } = postNewProfileIncorrectEmailType;
 
       expect(status).to.be.equals(400);
     });
 
-    it('\"\"userName\" must be a string\" se o tipo do username for incorreto',
+    it('\"email\" must be a string se o tipo do email for incorreto',
       async () => {
-        const { body: { message } } = postNewProfileIncorrectUsernameType;
+        const { body: { message } } = postNewProfileIncorrectEmailType;
 
-        expect(message).to.be.equals('\"userName\" must be a string');
+        expect(message).to.be.equals('\"email\" must be a string');
       }
     );
     
@@ -160,11 +160,11 @@ describe('Enpoint POST /profile/new', () => {
       }
     );
 
-    it('\"\"userName\" is required\" se o userName não foi informado',
+    it('\"email\" is required se o email não foi informado',
       async () => {
-        const { body: { message } } = postNewProfileWithoutUsername;
+        const { body: { message } } = postNewProfileWithoutEmail;
 
-        expect(message).to.be.equals('\"userName\" is required');
+        expect(message).to.be.equals('\"email\" is required');
       }
     );
 
@@ -176,11 +176,11 @@ describe('Enpoint POST /profile/new', () => {
       }
     );
 
-    it('\"\"userName\" is not allowed to be empty\" se o userName for uma string vazia',
+    it('\"email\" is not allowed to be empty se o email for uma string vazia',
       async () => {
-        const { body: { message } } = postNewProfileEmptyUsername;
+        const { body: { message } } = postNewProfileEmptyEmail;
 
-        expect(message).to.be.equals('\"userName\" is not allowed to be empty');
+        expect(message).to.be.equals('\"email\" is not allowed to be empty');
       }
     );
 
@@ -192,11 +192,11 @@ describe('Enpoint POST /profile/new', () => {
       }
     );
 
-    it('\"\"userName\" length must be at least 3 characters long\" se o username possuir menos que 3 caracteres',
+    it('\"email\" must be a valid email se o username possuir menos que 3 caracteres',
       async () => {
-        const { body: { message } } = postNewProfileUsernameLessThan3Chars;
+        const { body: { message } } = postNewProfileIncorrectEmailFormat;
 
-        expect(message).to.be.equals('\"userName\" length must be at least 3 characters long');
+        expect(message).to.be.equals('\"email\" must be a valid email');
       }
     );
 
@@ -207,6 +207,5 @@ describe('Enpoint POST /profile/new', () => {
         expect(message).to.be.equals('\"password\" length must be at least 6 characters long');
       }
     );
-    
   });
 });

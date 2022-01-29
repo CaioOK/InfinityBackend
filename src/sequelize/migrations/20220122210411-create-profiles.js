@@ -7,10 +7,9 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
       },
-      userName: {
+      email: {
         type: Sequelize.STRING,
         allowNull: false,
-        field: 'user_name',
         unique: true,
       },
       password: {

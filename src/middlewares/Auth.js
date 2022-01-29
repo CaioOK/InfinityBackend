@@ -10,9 +10,9 @@ module.exports = async (req, _res, next) => {
   if (!token) return next(tokenNotFound);
 
   try {
-    const { id, userName, role } = tokenValidator(token);
+    const { id, email, role } = tokenValidator(token);
 
-    req.user = { id, userName, role };
+    req.user = { id, email, role };
 
     return next();
   } catch (err) {

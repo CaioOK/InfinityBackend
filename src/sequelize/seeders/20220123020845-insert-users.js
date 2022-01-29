@@ -15,7 +15,7 @@ module.exports = {
         id: 2,
         name: 'Yudi Tamashiro',
         phone: '4002-8922',
-        email: 'yudihipehop@gmail.com',
+        email: 'yudihiphop@gmail.com',
         cpf: '820.233.956-15',
         profile_id: 2,
         created_at: Sequelize.literal('CURRENT_TIMESTAMP'),

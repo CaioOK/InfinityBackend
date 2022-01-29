@@ -14,7 +14,9 @@ require('dotenv').config();
 
 const app = express();
 
-const { PORT = 3000 } = process.env;
+// const { PORT = 3000 } = process.env;
+
+const PORT = process.env.NODE_ENV === 'test' ? 3001 : process.env.PORT;
 
 app.use(bodyParser.json());
 

@@ -8,8 +8,8 @@ const invalidToken = {
   httpCode: 'unauthorized',
 };
 
-const invalidUserNameOrPassword = {
-  message: 'Username or password incorrect',
+const invalidEmailOrPassword = {
+  message: 'Email or password incorrect',
   httpCode: 'badRequest',
 };
 
@@ -18,9 +18,15 @@ const userAlreadyRegistered = {
   httpCode: 'conflict',
 };
 
+const nonAdminEmailError = {
+  message: 'Email must be the same as the login',
+  httpCode: 'badRequest',
+};
+
 module.exports = {
   tokenNotFound,
   invalidToken,
-  invalidUserNameOrPassword,
+  invalidEmailOrPassword,
   userAlreadyRegistered,
+  nonAdminEmailError,
 };
