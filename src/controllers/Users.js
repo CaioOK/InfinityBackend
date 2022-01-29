@@ -5,11 +5,14 @@ const {
   invalidEmailOrPassword,
   userAlreadyRegistered,
   nonAdminEmailError,
+  incorrectPageNumber,
+  onlyForAdmins,
 } = require('../helpers/requestErrors');
 const {
   profileSchema,
   loginSchema,
   newUserSchema,
+  pageNumberSchema,
 } = require('../helpers/joiSchemas');
 
 const createProfile = rescue(async (req, res, next) => {
@@ -69,8 +72,39 @@ const createUser = rescue(async (req, res, next) => {
   }
 });
 
+const showUsers = rescue(async (req, res, next) => {
+  const { page = 1 } = req.query;
+  const { role } = req.user;
+
+  if (role !== 'admin') return next(onlyForAdmins);
+
+  const usersPerPage = 10;
+
+  const { error } = pageNumberSchema.validate({ page });
+
+  if (error) return next(incorrectPageNumber);
+
+  const users = await User.findAll({
+    attributes: {
+      exclude: ['profileId', 'profile_id', 'createdAt', 'updatedAt'],
+    },
+    include: [
+      {
+        model: Profile,
+        as: 'profile',
+        attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
+      },
+    ],
+    offset: (page - 1) * usersPerPage,
+    limit: usersPerPage,
+  });
+
+  res.status(200).json(users);
+});
+
 module.exports = {
   createProfile,
   login,
   createUser,
+  showUsers,
 };

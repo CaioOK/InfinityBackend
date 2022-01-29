@@ -23,8 +23,13 @@ const newUserSchema = Joi.object({
   cpf: Joi.string().pattern(cpfRegExp).required(),
 });
 
+const pageNumberSchema = Joi.object({
+  page: Joi.number().integer().min(1),
+});
+
 module.exports = {
   profileSchema,
   loginSchema,
   newUserSchema,
+  pageNumberSchema,
 };

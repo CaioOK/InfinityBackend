@@ -23,10 +23,22 @@ const nonAdminEmailError = {
   httpCode: 'badRequest',
 };
 
+const incorrectPageNumber = {
+  message: '"page" must be an integer greater than or equal to 1',
+  httpCode: 'unprocessableEntity',
+};
+
+const onlyForAdmins = {
+  message: 'You do not have access rights, please contact an administrator',
+  httpCode: 'unauthorized',
+};
+
 module.exports = {
   tokenNotFound,
   invalidToken,
   invalidEmailOrPassword,
   userAlreadyRegistered,
   nonAdminEmailError,
+  incorrectPageNumber,
+  onlyForAdmins,
 };

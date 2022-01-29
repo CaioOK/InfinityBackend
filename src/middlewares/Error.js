@@ -28,6 +28,6 @@ module.exports = async (err, _req, res, _next) => {
 
   //   return res.status(400).json(err);
   // }
-
+  console.log(err.message);
   return httpErrorHandler[err.httpCode](err.message, res);
 };

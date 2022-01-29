@@ -5,6 +5,7 @@ const {
   createProfile,
   login,
   createUser,
+  showUsers,
 } = require('./src/controllers/Users');
 
 const errorMiddleware = require('./src/middlewares/Error');
@@ -24,11 +25,13 @@ app.get('/', (_req, res) => {
   res.status(200).json({ message: 'Servidor funcionando!' });
 });
 
-app.post('/profile/new', createProfile);
+app.get('/users', authMiddleware, showUsers);
 
 app.post('/login', login);
 
-app.post('/user/new', authMiddleware, createUser);
+app.post('/profile/new', createProfile);
+
+app.post('/users/new', authMiddleware, createUser);
 
 app.use(errorMiddleware);
 
