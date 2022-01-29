@@ -1,9 +1,9 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const { stub } = require('sinon');
+// const { stub } = require('sinon');
 const app = require('../../index');
-const jwt = require('jsonwebtoken');
 const shell = require('shelljs');
+const { tokenValidator } = require('../../src/helpers/tokenHandler');
 
 require('dotenv').config();
 
@@ -17,10 +17,6 @@ const newProfile = {
 	email: 'xablau@email.com',
 	password: '123456',
 };
-
-const consoleLogStub = stub(console, 'log');
-before(()=> consoleLogStub.returns(true));
-after(()=> consoleLogStub.restore());
 
 describe('Enpoint POST /profile/new', () => {
   describe('quando os dados são válidos e o perfil não existe', () => {
@@ -55,7 +51,7 @@ describe('Enpoint POST /profile/new', () => {
     it('também retorna um token jwt válido com o email e role', async () => {
       const { body: { token } } = postNewProfile;
 
-      const { email, role } = jwt.verify(token, JWT_SECRET);
+      const { email, role } = tokenValidator(token, JWT_SECRET);
 
       expect(email).to.be.equals(newProfile.email);
       expect(role).to.be.equals('user');
@@ -192,7 +188,7 @@ describe('Enpoint POST /profile/new', () => {
       }
     );
 
-    it('\"email\" must be a valid email se o username possuir menos que 3 caracteres',
+    it('\"email\" must be a valid email se o email fornecido não obedecer o formato correto',
       async () => {
         const { body: { message } } = postNewProfileIncorrectEmailFormat;
 

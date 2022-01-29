@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha ./tests/**/*$NAME*.test.js --exit",
+    "test": "NODE_ENV=test mocha ./tests/**/*$NAME*.test.js --timeout 5000 --exit",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json .",
     "start": "node index.js",
     "dev": "nodemon index.js"

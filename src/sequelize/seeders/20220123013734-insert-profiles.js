@@ -4,7 +4,7 @@ module.exports = {
       {
         id: 1,
         email: 'mrrobot@ecorp.us',
-        password: 'tyrellpenosaco',
+        password: 'angelas2',
         role: 'admin',
         created_at: Sequelize.literal('CURRENT_TIMESTAMP'),
         updated_at: Sequelize.literal('CURRENT_TIMESTAMP'),
