@@ -6,6 +6,7 @@ const {
   login,
   createUser,
   showUsers,
+  findUserById,
 } = require('./src/controllers/Users');
 
 const errorMiddleware = require('./src/middlewares/Error');
@@ -26,6 +27,8 @@ app.get('/', (_req, res) => {
 });
 
 app.get('/users', authMiddleware, showUsers);
+
+app.get('/users/:id', authMiddleware, findUserById);
 
 app.post('/login', login);
 

@@ -33,6 +33,11 @@ const onlyForAdmins = {
   httpCode: 'unauthorized',
 };
 
+const userNotFound = {
+  message: 'User not found',
+  httpCode: 'notFound',
+};
+
 module.exports = {
   tokenNotFound,
   invalidToken,
@@ -41,4 +46,5 @@ module.exports = {
   incorrectEmail,
   incorrectPageNumber,
   onlyForAdmins,
+  userNotFound,
 };

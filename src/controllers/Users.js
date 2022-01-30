@@ -7,6 +7,7 @@ const {
   incorrectEmail,
   incorrectPageNumber,
   onlyForAdmins,
+  userNotFound,
 } = require('../helpers/requestErrors');
 const {
   profileSchema,
@@ -102,9 +103,34 @@ const showUsers = rescue(async (req, res, next) => {
   res.status(200).json(users);
 });
 
+const findUserById = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const { role } = req.user;
+
+  if (role !== 'admin') return next(onlyForAdmins);
+
+  const userFound = await User.findByPk(id, {
+    attributes: {
+      exclude: ['profileId', 'profile_id', 'createdAt', 'updatedAt'],
+    },
+    include: [
+      {
+        model: Profile,
+        as: 'profile',
+        attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
+      },
+    ],
+  });
+
+  if (!userFound) return next(userNotFound);
+
+  return res.status(200).json(userFound);
+});
+
 module.exports = {
   createProfile,
   login,
   createUser,
   showUsers,
+  findUserById,
 };
