@@ -5,7 +5,7 @@ const {
   createProfile,
   login,
   createUser,
-  showUsers,
+  findAllUsers,
   findUserById,
 } = require('./src/controllers/Users');
 
@@ -26,7 +26,7 @@ app.get('/', (_req, res) => {
   res.status(200).json({ message: 'Servidor funcionando!' });
 });
 
-app.get('/users', authMiddleware, showUsers);
+app.get('/users', authMiddleware, findAllUsers);
 
 app.get('/users/:id', authMiddleware, findUserById);
 

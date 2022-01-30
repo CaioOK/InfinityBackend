@@ -73,7 +73,7 @@ const createUser = rescue(async (req, res, next) => {
   }
 });
 
-const showUsers = rescue(async (req, res, next) => {
+const findAllUsers = rescue(async (req, res, next) => {
   const { page = 1 } = req.query;
   const { role } = req.user;
 
@@ -131,6 +131,6 @@ module.exports = {
   createProfile,
   login,
   createUser,
-  showUsers,
+  findAllUsers,
   findUserById,
 };
