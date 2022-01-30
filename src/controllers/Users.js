@@ -4,7 +4,7 @@ const { tokenGenerator } = require('../helpers/tokenHandler');
 const {
   invalidEmailOrPassword,
   userAlreadyRegistered,
-  nonAdminEmailError,
+  incorrectEmail,
   incorrectPageNumber,
   onlyForAdmins,
 } = require('../helpers/requestErrors');
@@ -55,13 +55,13 @@ const login = rescue(async (req, res, next) => {
 
 const createUser = rescue(async (req, res, next) => {
   const { name, phone, email, cpf } = req.body;
-  const { id: profileId, email: tokenEmail, role } = req.user;
+  const { id: profileId, email: tokenEmail } = req.user;
 
   const { error } = newUserSchema.validate(req.body);
 
   if (error) return next(error);
 
-  if (role !== 'admin' && tokenEmail !== email) return next(nonAdminEmailError);
+  if (tokenEmail !== email) return next(incorrectEmail);
 
   try {
     await User.create({ name, phone, email, cpf, profileId });

@@ -18,8 +18,8 @@ const userAlreadyRegistered = {
   httpCode: 'conflict',
 };
 
-const nonAdminEmailError = {
-  message: 'Email must be the same as the login',
+const incorrectEmail = {
+  message: 'Email must be the same as the profile',
   httpCode: 'badRequest',
 };
 
@@ -38,7 +38,7 @@ module.exports = {
   invalidToken,
   invalidEmailOrPassword,
   userAlreadyRegistered,
-  nonAdminEmailError,
+  incorrectEmail,
   incorrectPageNumber,
   onlyForAdmins,
 };
