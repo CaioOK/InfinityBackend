@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test mocha ./tests/**/*$NAME*.test.js --timeout 5000 --exit",
+    "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json .",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +15,7 @@
   "dependencies": {
     "body-parser": "^1.19.1",
     "dotenv": "^14.2.0",
+    "eslint-config-trybe-backend": "^1.0.4",
     "express": "^4.17.2",
     "express-rescue": "^1.1.31",
     "joi": "^17.5.0",
@@ -20,10 +24,16 @@
     "sequelize": "^6.14.0"
   },
   "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
     "eslint": "^8.7.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-sonarjs": "^0.11.0",
+    "mocha": "^9.1.4",
     "nodemon": "^2.0.15",
-    "sequelize-cli": "^6.4.1"
+    "sequelize-cli": "^6.4.1",
+    "shelljs": "^0.8.5",
+    "sinon": "^12.0.1"
   }
 }
