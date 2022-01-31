@@ -38,6 +38,11 @@ const userNotFound = {
   httpCode: 'notFound',
 };
 
+const provideAtLeastOneField = {
+  message: 'You must provide at least a name, email, phone, cpf or role',
+  httpCode: 'unprocessableEntity',
+};
+
 module.exports = {
   tokenNotFound,
   invalidToken,
@@ -47,4 +52,5 @@ module.exports = {
   incorrectPageNumber,
   onlyForAdmins,
   userNotFound,
+  provideAtLeastOneField,
 };

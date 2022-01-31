@@ -7,27 +7,24 @@ const httpErrorHandler = {
   undefined: (_message, res) => res.status(500).json({ message: 'Internal Server Error' }),
 };
 
+const specificJoiErrors = {
+  cpf: (res, httpCode) =>
+    httpErrorHandler[httpCode]('The CPF must be in the format XXX.XXX.XXX-XX', res),
+  phone: (res, httpCode) =>
+    httpErrorHandler[httpCode]('Incorrect phone format', res),
+  role: (res, httpCode) =>
+    httpErrorHandler[httpCode]('role must be user or admin', res),
+};
+
 module.exports = async (err, _req, res, _next) => {
   if (err.isJoi) {
     const { message, context: { key } } = err.details[0];
 
-    if (key === 'cpf') {
-      return httpErrorHandler.unprocessableEntity(
-        'The CPF must be in the format XXX.XXX.XXX-XX',
-        res,
-      );
-    }
-
-    if (key === 'phone') return httpErrorHandler.unprocessableEntity('Incorrect phone format', res);
+    if (specificJoiErrors[key]) return specificJoiErrors[key](res, 'unprocessableEntity');
 
     return httpErrorHandler.badRequest(message, res);
   }
 
-  // if (err.sql) {
-  //   console.log(err);
-
-  //   return res.status(400).json(err);
-  // }
   console.log(err.message);
   return httpErrorHandler[err.httpCode](err.message, res);
 };

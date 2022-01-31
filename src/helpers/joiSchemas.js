@@ -27,9 +27,18 @@ const pageNumberSchema = Joi.object({
   page: Joi.number().integer().min(1),
 });
 
+const updateUserSchema = Joi.object({
+  name: Joi.string().not().empty(),
+  phone: Joi.string().pattern(phoneRegExp),
+  email: Joi.string().email(),
+  cpf: Joi.string().pattern(cpfRegExp),
+  role: Joi.string().pattern(/(\buser\b|\badmin\b)/),
+});
+
 module.exports = {
   profileSchema,
   loginSchema,
   newUserSchema,
   pageNumberSchema,
+  updateUserSchema,
 };

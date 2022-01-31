@@ -7,10 +7,12 @@ const {
   createUser,
   findAllUsers,
   findUserById,
+  updateAnUser,
 } = require('./src/controllers/Users');
 
-const errorMiddleware = require('./src/middlewares/Error');
-const authMiddleware = require('./src/middlewares/Auth');
+const errorMiddleware = require('./src/middlewares/error');
+const authMiddleware = require('./src/middlewares/auth');
+const adminRequired = require('./src/middlewares/adminRequired');
 
 require('dotenv').config();
 
@@ -26,15 +28,17 @@ app.get('/', (_req, res) => {
   res.status(200).json({ message: 'Servidor funcionando!' });
 });
 
-app.get('/users', authMiddleware, findAllUsers);
+app.get('/users', authMiddleware, adminRequired, findAllUsers);
 
-app.get('/users/:id', authMiddleware, findUserById);
+app.get('/users/:id', authMiddleware, adminRequired, findUserById);
 
 app.post('/login', login);
 
 app.post('/profile/new', createProfile);
 
 app.post('/users/new', authMiddleware, createUser);
+
+app.put('/users/update/:id', authMiddleware, adminRequired, updateAnUser);
 
 app.use(errorMiddleware);
 
