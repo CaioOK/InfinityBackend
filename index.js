@@ -9,6 +9,7 @@ const {
   findUserById,
   updateAnUser,
 } = require('./src/controllers/Users');
+const { createStore } = require('./src/controllers/Stores');
 
 const errorMiddleware = require('./src/middlewares/error');
 const authMiddleware = require('./src/middlewares/auth');
@@ -35,6 +36,8 @@ app.get('/users/:id', authMiddleware, adminRequired, findUserById);
 app.post('/login', login);
 
 app.post('/profile/new', createProfile);
+
+app.post('/stores/new', authMiddleware, adminRequired, createStore);
 
 app.post('/users/new', authMiddleware, createUser);
 

@@ -43,6 +43,16 @@ const provideAtLeastOneField = {
   httpCode: 'unprocessableEntity',
 };
 
+const categoryNotFound = {
+  message: 'Category not found',
+  httpCode: 'notFound',
+};
+
+const storeAlreadyRegistered = {
+  message: 'Store name or localization already registered',
+  httpCode: 'conflict',
+};
+
 module.exports = {
   tokenNotFound,
   invalidToken,
@@ -53,4 +63,6 @@ module.exports = {
   onlyForAdmins,
   userNotFound,
   provideAtLeastOneField,
+  categoryNotFound,
+  storeAlreadyRegistered,
 };

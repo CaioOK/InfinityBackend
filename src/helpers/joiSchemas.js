@@ -35,10 +35,19 @@ const updateUserSchema = Joi.object({
   role: Joi.string().pattern(/(\buser\b|\badmin\b)/),
 });
 
+const createStoreSchema = Joi.object({ 
+  name: Joi.string().not().empty().required(),
+  description: Joi.string().not().empty().required(),
+  localization: Joi.string().not().empty().required(),
+  categoryId: Joi.number().options({ convert: false }).required(),
+  logo: Joi.string().not().empty().required(),
+});
+
 module.exports = {
   profileSchema,
   loginSchema,
   newUserSchema,
   pageNumberSchema,
   updateUserSchema,
+  createStoreSchema,
 };
