@@ -9,7 +9,10 @@ const {
   findUserById,
   updateAnUser,
 } = require('./src/controllers/Users');
-const { createStore } = require('./src/controllers/Stores');
+const {
+  createStore,
+  findAllStores,
+} = require('./src/controllers/Stores');
 
 const errorMiddleware = require('./src/middlewares/error');
 const authMiddleware = require('./src/middlewares/auth');
@@ -28,6 +31,8 @@ app.use(bodyParser.json());
 app.get('/', (_req, res) => {
   res.status(200).json({ message: 'Servidor funcionando!' });
 });
+
+app.get('/stores', authMiddleware, adminRequired, findAllStores);
 
 app.get('/users', authMiddleware, adminRequired, findAllUsers);
 
