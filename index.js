@@ -11,7 +11,7 @@ const {
 } = require('./src/controllers/Users');
 const {
   createStore,
-  findAllStores,
+  findStores,
   updateStore,
 } = require('./src/controllers/Stores');
 
@@ -33,7 +33,7 @@ app.get('/', (_req, res) => {
   res.status(200).json({ message: 'Servidor funcionando!' });
 });
 
-app.get('/stores', authMiddleware, findAllStores);
+app.get('/stores', authMiddleware, findStores);
 
 app.get('/users', authMiddleware, adminRequired, findAllUsers);
 

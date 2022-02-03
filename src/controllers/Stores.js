@@ -46,7 +46,7 @@ const createStore = rescue(async (req, res, next) => {
   }
 });
 
-const findAllStores = rescue(async (req, res, next) => {
+const findStores = rescue(async (req, res, next) => {
   const { page = 1, name = '', category = '' } = req.query;
 
   const storesPerPage = 10;
@@ -75,6 +75,7 @@ const findAllStores = rescue(async (req, res, next) => {
     ],
     offset: (page - 1) * storesPerPage,
     limit: storesPerPage,
+    order: [['id', 'ASC']],
   });
 
   res.status(200).json(storesFound);
@@ -109,6 +110,6 @@ const updateStore = rescue(async (req, res, next) => {
 
 module.exports = {
   createStore,
-  findAllStores,
+  findStores,
   updateStore,
 };
