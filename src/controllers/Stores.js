@@ -1,4 +1,5 @@
 const rescue = require('express-rescue');
+const Sequelize = require('sequelize');
 const { Store, Category } = require('../sequelize/models');
 const {
   createStoreSchema,
@@ -10,15 +11,15 @@ const {
   incorrectPageNumber,
 } = require('../helpers/requestErrors');
 
-const storeWithCategoryConfig = {
-  attributes: { exclude: ['category_id', 'createdAt', 'updatedAt'] },
-  include: [
-    { model: Category,
-      as: 'category',
-      attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
-    },
-  ],
-};
+// const storeWithCategoryConfig = {
+//   attributes: { exclude: ['category_id', 'createdAt', 'updatedAt'] },
+//   include: [
+//     { model: Category,
+//       as: 'category',
+//       attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
+//     },
+//   ],
+// };
 
 const createStore = rescue(async (req, res, next) => {
   const { name, description, localization, categoryId, logo } = req.body;
@@ -43,7 +44,7 @@ const createStore = rescue(async (req, res, next) => {
 });
 
 const findAllStores = rescue(async (req, res, next) => {
-  const { page = 1 } = req.query;
+  const { page = 1, name = '', category = '' } = req.query;
 
   const storesPerPage = 10;
 
@@ -51,8 +52,24 @@ const findAllStores = rescue(async (req, res, next) => {
 
   if (error) return next(incorrectPageNumber);
 
+  const { like, or } = Sequelize.Op;
+
   const storesFound = await Store.findAll({
-    ...storeWithCategoryConfig,
+    where: { 
+      [or]: [
+        { name: { [like]: `%${name}%` } },
+        { description: { [like]: `%${name}%` } },
+      ],
+    },
+    attributes: { exclude: ['category_id', 'createdAt', 'updatedAt'] },
+    include: [
+      {
+        model: Category,
+        as: 'category',
+        attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
+        where: { name: { [like]: `%${category}%` } },
+      },
+    ],
     offset: (page - 1) * storesPerPage,
     limit: storesPerPage,
   });
