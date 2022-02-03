@@ -39,7 +39,7 @@ const userNotFound = {
 };
 
 const provideAtLeastOneField = {
-  message: 'You must provide at least a name, email, phone, cpf or role',
+  message: 'You must provide at least onde field',
   httpCode: 'unprocessableEntity',
 };
 
@@ -51,6 +51,11 @@ const categoryNotFound = {
 const storeAlreadyRegistered = {
   message: 'Store name or localization already registered',
   httpCode: 'conflict',
+};
+
+const storeNotFound = {
+  message: 'Store not found',
+  httpCode: 'notFound',
 };
 
 module.exports = {
@@ -65,4 +70,5 @@ module.exports = {
   provideAtLeastOneField,
   categoryNotFound,
   storeAlreadyRegistered,
+  storeNotFound,
 };

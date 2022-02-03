@@ -43,6 +43,14 @@ const createStoreSchema = Joi.object({
   logo: Joi.string().not().empty().required(),
 });
 
+const updateStoreSchema = Joi.object({
+  name: Joi.string().not().empty(),
+  description: Joi.string().not().empty(),
+  localization: Joi.string().not().empty(),
+  categoryId: Joi.number().options({ convert: false }),
+  logo: Joi.string().not().empty(),
+});
+
 module.exports = {
   profileSchema,
   loginSchema,
@@ -50,4 +58,5 @@ module.exports = {
   pageNumberSchema,
   updateUserSchema,
   createStoreSchema,
+  updateStoreSchema,
 };

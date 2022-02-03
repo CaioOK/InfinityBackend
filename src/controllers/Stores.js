@@ -4,22 +4,25 @@ const { Store, Category } = require('../sequelize/models');
 const {
   createStoreSchema,
   pageNumberSchema,
+  updateStoreSchema,
 } = require('../helpers/joiSchemas');
 const {
   categoryNotFound,
   storeAlreadyRegistered,
   incorrectPageNumber,
+  provideAtLeastOneField,
+  storeNotFound,
 } = require('../helpers/requestErrors');
 
-// const storeWithCategoryConfig = {
-//   attributes: { exclude: ['category_id', 'createdAt', 'updatedAt'] },
-//   include: [
-//     { model: Category,
-//       as: 'category',
-//       attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
-//     },
-//   ],
-// };
+const storeWithCategoryConfig = {
+  attributes: { exclude: ['category_id', 'createdAt', 'updatedAt'] },
+  include: [
+    { model: Category,
+      as: 'category',
+      attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
+    },
+  ],
+};
 
 const createStore = rescue(async (req, res, next) => {
   const { name, description, localization, categoryId, logo } = req.body;
@@ -77,7 +80,35 @@ const findAllStores = rescue(async (req, res, next) => {
   res.status(200).json(storesFound);
 });
 
+const updateStore = rescue(async (req, res, next) => {
+  const { id } = req.params;
+
+  const { error } = updateStoreSchema.validate(req.body);
+
+  if (error) return next(error);
+
+  // Se não foi fornecido pelomenos um campo retorna um erro
+  if (!Object.keys(req.body).length) return next(provideAtLeastOneField);
+
+  const storeFound = await Store.findByPk(id, storeWithCategoryConfig);
+
+  if (!storeFound) return next(storeNotFound);
+
+  try {
+    await Store.update(req.body, { where: { id } });
+
+    const updatedStore = await Store.findByPk(id, storeWithCategoryConfig);
+
+    return res.status(200).json(updatedStore);
+  } catch (err) {
+    if (err.name === 'SequelizeForeignKeyConstraintError') return next(categoryNotFound);
+
+    return next(storeAlreadyRegistered);
+  }
+});
+
 module.exports = {
   createStore,
   findAllStores,
+  updateStore,
 };

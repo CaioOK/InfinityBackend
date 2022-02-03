@@ -12,6 +12,7 @@ const {
 const {
   createStore,
   findAllStores,
+  updateStore,
 } = require('./src/controllers/Stores');
 
 const errorMiddleware = require('./src/middlewares/error');
@@ -32,7 +33,7 @@ app.get('/', (_req, res) => {
   res.status(200).json({ message: 'Servidor funcionando!' });
 });
 
-app.get('/stores', authMiddleware, adminRequired, findAllStores);
+app.get('/stores', authMiddleware, findAllStores);
 
 app.get('/users', authMiddleware, adminRequired, findAllUsers);
 
@@ -45,6 +46,8 @@ app.post('/profile/new', createProfile);
 app.post('/stores/new', authMiddleware, adminRequired, createStore);
 
 app.post('/users/new', authMiddleware, createUser);
+
+app.put('/stores/update/:id', authMiddleware, adminRequired, updateStore);
 
 app.put('/users/update/:id', authMiddleware, adminRequired, updateAnUser);
 
