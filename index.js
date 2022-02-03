@@ -13,6 +13,7 @@ const {
   createStore,
   findStores,
   updateStore,
+  deleteStore,
 } = require('./src/controllers/Stores');
 
 const errorMiddleware = require('./src/middlewares/error');
@@ -32,6 +33,8 @@ app.use(bodyParser.json());
 app.get('/', (_req, res) => {
   res.status(200).json({ message: 'Servidor funcionando!' });
 });
+
+app.delete('/stores/delete/:id', authMiddleware, adminRequired, deleteStore);
 
 app.get('/stores', authMiddleware, findStores);
 

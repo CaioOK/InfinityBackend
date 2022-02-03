@@ -108,8 +108,21 @@ const updateStore = rescue(async (req, res, next) => {
   }
 });
 
+const deleteStore = rescue(async (req, res, next) => {
+  const { id } = req.params;
+
+  const storeFound = await Store.findByPk(id);
+
+  if (!storeFound) return next(storeNotFound);
+
+  await storeFound.destroy();
+
+  return res.status(200).json(storeFound);
+});
+
 module.exports = {
   createStore,
   findStores,
   updateStore,
+  deleteStore,
 };
