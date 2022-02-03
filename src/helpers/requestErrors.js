@@ -33,6 +33,31 @@ const onlyForAdmins = {
   httpCode: 'unauthorized',
 };
 
+const userNotFound = {
+  message: 'User not found',
+  httpCode: 'notFound',
+};
+
+const provideAtLeastOneField = {
+  message: 'You must provide at least onde field',
+  httpCode: 'unprocessableEntity',
+};
+
+const categoryNotFound = {
+  message: 'Category not found',
+  httpCode: 'notFound',
+};
+
+const storeAlreadyRegistered = {
+  message: 'Store name or localization already registered',
+  httpCode: 'conflict',
+};
+
+const storeNotFound = {
+  message: 'Store not found',
+  httpCode: 'notFound',
+};
+
 module.exports = {
   tokenNotFound,
   invalidToken,
@@ -41,4 +66,9 @@ module.exports = {
   incorrectEmail,
   incorrectPageNumber,
   onlyForAdmins,
+  userNotFound,
+  provideAtLeastOneField,
+  categoryNotFound,
+  storeAlreadyRegistered,
+  storeNotFound,
 };

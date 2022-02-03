@@ -5,11 +5,20 @@ const {
   createProfile,
   login,
   createUser,
-  showUsers,
+  findAllUsers,
+  findUserById,
+  updateAnUser,
 } = require('./src/controllers/Users');
+const {
+  createStore,
+  findStores,
+  updateStore,
+  deleteStore,
+} = require('./src/controllers/Stores');
 
-const errorMiddleware = require('./src/middlewares/Error');
-const authMiddleware = require('./src/middlewares/Auth');
+const errorMiddleware = require('./src/middlewares/error');
+const authMiddleware = require('./src/middlewares/auth');
+const adminRequired = require('./src/middlewares/adminRequired');
 
 require('dotenv').config();
 
@@ -25,13 +34,25 @@ app.get('/', (_req, res) => {
   res.status(200).json({ message: 'Servidor funcionando!' });
 });
 
-app.get('/users', authMiddleware, showUsers);
+app.delete('/stores/delete/:id', authMiddleware, adminRequired, deleteStore);
+
+app.get('/stores', authMiddleware, findStores);
+
+app.get('/users', authMiddleware, adminRequired, findAllUsers);
+
+app.get('/users/:id', authMiddleware, adminRequired, findUserById);
 
 app.post('/login', login);
 
 app.post('/profile/new', createProfile);
 
+app.post('/stores/new', authMiddleware, adminRequired, createStore);
+
 app.post('/users/new', authMiddleware, createUser);
+
+app.put('/stores/update/:id', authMiddleware, adminRequired, updateStore);
+
+app.put('/users/update/:id', authMiddleware, adminRequired, updateAnUser);
 
 app.use(errorMiddleware);
 

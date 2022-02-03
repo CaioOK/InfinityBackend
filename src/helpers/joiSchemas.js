@@ -27,9 +27,36 @@ const pageNumberSchema = Joi.object({
   page: Joi.number().integer().min(1),
 });
 
+const updateUserSchema = Joi.object({
+  name: Joi.string().not().empty(),
+  phone: Joi.string().pattern(phoneRegExp),
+  email: Joi.string().email(),
+  cpf: Joi.string().pattern(cpfRegExp),
+  role: Joi.string().pattern(/(\buser\b|\badmin\b)/),
+});
+
+const createStoreSchema = Joi.object({ 
+  name: Joi.string().not().empty().required(),
+  description: Joi.string().not().empty().required(),
+  localization: Joi.string().not().empty().required(),
+  categoryId: Joi.number().options({ convert: false }).required(),
+  logo: Joi.string().not().empty().required(),
+});
+
+const updateStoreSchema = Joi.object({
+  name: Joi.string().not().empty(),
+  description: Joi.string().not().empty(),
+  localization: Joi.string().not().empty(),
+  categoryId: Joi.number().options({ convert: false }),
+  logo: Joi.string().not().empty(),
+});
+
 module.exports = {
   profileSchema,
   loginSchema,
   newUserSchema,
   pageNumberSchema,
+  updateUserSchema,
+  createStoreSchema,
+  updateStoreSchema,
 };
