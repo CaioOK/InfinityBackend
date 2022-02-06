@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "https://infinity-brasil-api.herokuapp.com/",
+      "url": "http://localhost:3000",
       "description": "Production API"
     }
   ],
@@ -20,7 +20,7 @@
       "post": {
         "summary": "Criação de Perfis",
         "description": "Endpoint responsável pela criação de perfis",
-        "tags": ["Users"],
+        "tags": ["Profile"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -45,7 +45,7 @@
             "description": "Validations fails like \"email must be a valid email\" or \"password length must be at least 6 characters long\""
           },
           "409": {
-            "description": "\"User already registered\""
+            "description": "User already registered"
           }
         }
       }
@@ -54,7 +54,7 @@
       "post": {
         "summary": "Login",
         "description": "Endpoint responsável por iniciar uma nova sessão para o usuário e retornar um token jwt",
-        "tags": ["Users"],
+        "tags": ["Profile"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -84,14 +84,14 @@
     "/users/new": {
       "post": {
         "summary": "Cadastro de usuários",
-        "description": "Faz o cadastro de dados de um usuário que possui um perfil criado",
+        "description": "O usuário poderá cadastrar seus dados e então serão vinculados seu perfil",
         "tags": ["Users"],
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewUser"
+                "$ref": "#/components/schemas/UserData"
               }
             }
           }
@@ -102,7 +102,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NewUser"
+                  "$ref": "#/components/schemas/UserData"
                 }
               }
             }
@@ -114,10 +114,48 @@
             "description": "Not sent or invalid token"
           },
           "409": {
-            "description": "\"User already registered\""
+            "description": "User already registered"
           },
           "422": {
             "description": "Incorrect phone or cpf format"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Visualizar dados dos usuários - Somente Admin",
+        "description": "Retorna dados dos usuários cadastrados utilizando paginação, com até 10 resultados por página. \n\n Por padão GET /users retorna os dados dos 10 primeiros usuários correspondendo a primeira página. \n\n Isto é equivalente a GET /users?page=1, então GET /users?page=2 retornará a segunda página e assim por diante",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Number of page",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDataAndProfle"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect page number"
+          },
+          "401": {
+            "description": "Not sent or invalid token or user isn't an admin"
           }
         }
       }
@@ -181,7 +219,7 @@
           }
         }
       },
-      "NewUser": {
+      "UserData": {
         "type": "object",
         "properties": {
           "name": {
@@ -199,6 +237,45 @@
           "cpf": {
             "type": "string",
             "example": "127.932.196-05"
+          }
+        }
+      },
+      "UserDataAndProfle": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Xablau da Silva"
+          },
+          "phone": {
+            "type": "string",
+            "example": "11999999999 or (11)99999-9999"
+          },
+          "email": {
+            "type": "string",
+            "example": "xablau@email.com"
+          },
+          "cpf": {
+            "type": "string",
+            "example": "127.932.196-05"
+          },
+          "profileId": {
+            "type": "integer",
+            "example": "2"
+          },
+          "profile": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "example": "xablau@email.com"
+              },
+              "role": {
+                "type": "string",
+                "example": "user",
+                "description": "Access level"
+              }
+            }
           }
         }
       }
