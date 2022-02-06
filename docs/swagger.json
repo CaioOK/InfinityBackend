@@ -84,7 +84,7 @@
     "/users/new": {
       "post": {
         "summary": "Cadastro de usuários",
-        "description": "O usuário poderá cadastrar seus dados e então serão vinculados seu perfil.",
+        "description": "O usuário poderá cadastrar seus dados e então serão vinculados ao seu perfil.",
         "tags": ["Users"],
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
