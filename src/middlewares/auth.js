@@ -5,11 +5,11 @@ const {
 const { tokenValidator } = require('../helpers/tokenHandler');
 
 module.exports = async (req, _res, next) => {
-  const token = req.headers.authorization;
+  const { authorization } = req.headers;
 
-  if (!token) return next(tokenNotFound);
-
+  if (!authorization) return next(tokenNotFound);
   try {
+    const [, token] = authorization.split(' ');
     const { id, email, role } = tokenValidator(token);
 
     req.user = { id, email, role };

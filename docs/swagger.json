@@ -1,0 +1,652 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Infinity API",
+    "description": "Api de gerenciamento de usuários e lojas, com recurso de criação de perfis e autenticação com token jwt",
+    "termsOfService": "http://google.com",
+    "contact": {
+      "email": "caiodioliveira@hotmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Production API"
+    }
+  ],
+  "paths": {
+    "/profile/new": {
+      "post": {
+        "summary": "Criação de Perfis",
+        "description": "Endpoint responsável pela criação de perfis.",
+        "tags": ["Profile"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewProfileRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewProfileResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validations fails like \"email must be a valid email\" or \"password length must be at least 6 characters long\""
+          },
+          "409": {
+            "description": "User already registered"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Login",
+        "description": "Endpoint responsável por iniciar uma nova sessão para o usuário e retornar um token jwt",
+        "tags": ["Profile"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email or password incorrect"
+          }
+        }
+      }
+    },
+    "/users/new": {
+      "post": {
+        "summary": "Cadastro de usuários",
+        "description": "O usuário poderá cadastrar seus dados e então serão vinculados ao seu perfil.",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid name or email"
+          },
+          "401": {
+            "description": "Not sent or invalid token"
+          },
+          "409": {
+            "description": "User already registered"
+          },
+          "422": {
+            "description": "Incorrect phone or cpf format"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Visualizar dados dos usuários - Requer nível de acesso admin",
+        "description": "Retorna dados dos usuários cadastrados utilizando paginação, com até 10 resultados por página. \n\n Por padão GET /users retorna os dados dos 10 primeiros usuários correspondendo a primeira página. \n\n Isto é equivalente a GET /users?page=1, então GET /users?page=2 retornará a segunda página e assim por diante.",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Number of page",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDataAndProfile"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect page number"
+          },
+          "401": {
+            "description": "Not sent or invalid token or user isn't an admin"
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "summary": "Visualizar dados de um usuário buscando pelo id - Requer nível de acesso admin",
+        "description": "Retorna os dados de um usuário específico juntament com irformações do seu perfil.",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "Id do usuário de que se deseja obter os dados",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDataAndProfile"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not sent or invalid token or user isn't an admin"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/users/update/{userId}": {
+      "put": {
+        "summary": "Atualiza os dados de um usuário - Requer nível de acesso admin",
+        "description": "Um admin poderá atualizar os dados de um usuário especificado pelo id.",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "Id do usuário de que se deseja obter os dados.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDataAndProfile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validations fails"
+          },
+          "401": {
+            "description": "Not sent or invalid token or user isn't an admin"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/stores/new": {
+      "post": {
+        "summary": "Cadastro de lojas - Requer nível de acesso admin",
+        "description": "Um admin poderá cadastrar uma nova loja.",
+        "tags": ["Stores"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation fails"
+          },
+          "401": {
+            "description": "Not sent or invalid token"
+          },
+          "409": {
+            "description": "Store name or localization already registered"
+          },
+          "404": {
+            "description": "Category not found"
+          }
+        }
+      }
+    },
+    "/stores": {
+      "get": {
+        "summary": "Visualizar lojas cadastradas",
+        "description": "Retorna dados das lojas cadastrados utilizando paginação, com até 10 resultados por página. \n\n Por padão GET /stores retorna os dados das 10 primeiras lojas correspondendo a primeira página. \n\n Isto é equivalente a GET /stores?page=1, então GET /stores?page=2 retornará a segunda página e assim por diante.",
+        "tags": ["Stores"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Number of page",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Filter by name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Filter by category",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StoreDataAndCategory"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect page number"
+          },
+          "401": {
+            "description": "Not sent or invalid token"
+          }
+        }
+      }
+    },
+    "/stores/update/{storeId}": {
+      "put": {
+        "summary": "Atualiza os dados de uma loja - Requer nível de acesso admin",
+        "description": "Um admin poderá atualizar os dados de uma loja especificada pelo id.",
+        "tags": ["Stores"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "Id da loja de que se deseja atualizar os dados.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreDataAndCategory"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validations fails"
+          },
+          "401": {
+            "description": "Not sent or invalid token or user isn't an admin"
+          },
+          "404": {
+            "description": "Store or category not found"
+          },
+          "409": {
+            "description": "Store name or localization already registered"
+          },
+          "422": {
+            "description": "You must provide at least onde field"
+          }
+        }
+      }
+    },
+    "/stores/delete/{storeId}" : {
+      "delete": {
+        "summary": "Excluir loja - Requer nível de acesso admin",
+        "description": "Um admin poderá excluir o cadastro de uma loja especificada pelo id.",
+        "tags": ["Stores"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "Id da loja de que se deseja atualizar os dados.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "401": {
+            "description": "Not sent or invalid token or user isn't an admin"
+          },
+          "404": {
+            "description": "Store not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NewProfileRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "xablau@email.com",
+            "description": "must be a valid email"
+          },
+          "password": {
+            "type": "string",
+            "example": "123456",
+            "description": "length must be at least 6 characteres"
+          }
+        }
+      },
+      "NewProfileResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "description": "user by default"
+          },
+          "token": {
+            "type": "string",
+            "description": "token jwt"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "xablau@email.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "123456"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJI2zI1NiIsI2R5cCI6IkpXVwJ9.eyJpZCI6MSwiZl1haWwiOiJtcnJvYm90QGVjb3JwLnVzIiwicm9sZSI6ImFkbWluIiwiaWFoIjoxNjQzOTkzNzE4LCJleHAiOjE2NDQwODAxMTh9\n.tp4UdUTE5Ktjgcv3KG9C254ajiuvVzC_0xOzu52ApGE"
+          }
+        }
+      },
+      "UserData": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Xablau da Silva"
+          },
+          "phone": {
+            "type": "string",
+            "example": "11999999999 or (11)99999-9999"
+          },
+          "email": {
+            "type": "string",
+            "example": "xablau@email.com"
+          },
+          "cpf": {
+            "type": "string",
+            "example": "127.932.196-05"
+          }
+        }
+      },
+      "UserDataAndProfile": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Xablau da Silva"
+          },
+          "phone": {
+            "type": "string",
+            "example": "11999999999 or (11)99999-9999"
+          },
+          "email": {
+            "type": "string",
+            "example": "xablau@email.com"
+          },
+          "cpf": {
+            "type": "string",
+            "example": "127.932.196-05"
+          },
+          "profileId": {
+            "type": "integer",
+            "example": "2"
+          },
+          "profile": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "example": "xablau@email.com"
+              },
+              "role": {
+                "type": "string",
+                "example": "user",
+                "description": "Access level"
+              }
+            }
+          }
+        }
+      },
+      "UpdateUserData": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Xablau da Silva",
+            "required": false
+          },
+          "phone": {
+            "type": "string",
+            "example": "11999999999 or (11)99999-9999",
+            "required": false
+          },
+          "email": {
+            "type": "string",
+            "example": "xablau@email.com",
+            "required": false
+          },
+          "cpf": {
+            "type": "string",
+            "example": "127.932.196-05",
+            "required": false
+          },
+          "role": {
+            "type": "string",
+            "example": "user or admin",
+            "required": false
+          }
+        }
+      },
+      "StoreData": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Ricardão Eletro",
+            "description": "Must be unique"
+          },
+          "description": {
+            "type": "string",
+            "example": "Aqui tem de tudo pra sua casa e esposa"
+          },
+          "localization": {
+            "type": "string",
+            "example": "-1.5423595, 1.41435143",
+            "description": "Must be unique"
+          },
+          "categoryId": {
+            "type": "integer",
+            "example": 1,
+            "description": "Id of an existing category"
+          },
+          "logo": {
+            "type": "string",
+            "example": "https://pbs.twimg.com/profile_images/975095764803309568/TGZU72J4_400x400.jpg",
+            "description": "Link of logo"
+          }
+        }
+      },
+      "StoreDataAndCategory": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1,
+            "description": "Store id"
+          },
+          "name": {
+            "type": "string",
+            "example": "Ricardão Eletro",
+            "description": "Must be unique"
+          },
+          "description": {
+            "type": "string",
+            "example": "Aqui tem de tudo pra sua casa e esposa"
+          },
+          "localization": {
+            "type": "string",
+            "example": "-1.5423595, 1.41435143",
+            "description": "Must be unique"
+          },
+          "categoryId": {
+            "type": "integer",
+            "example": 2,
+            "description": "Id of an existing category"
+          },
+          "logo": {
+            "type": "string",
+            "example": "https://pbs.twimg.com/profile_images/975095764803309568/TGZU72J4_400x400.jpg",
+            "description": "Link of logo"
+          },
+          "category": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Agropecuária"
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
