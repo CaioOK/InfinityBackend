@@ -55,7 +55,7 @@ app.post('/users/new', authMiddleware, createUser); // Documentado
 
 app.put('/stores/update/:id', authMiddleware, adminRequired, updateStore);
 
-app.put('/users/update/:id', authMiddleware, adminRequired, updateAnUser);
+app.put('/users/update/:id', authMiddleware, adminRequired, updateAnUser); // Documentado
 
 app.use(errorMiddleware);
 

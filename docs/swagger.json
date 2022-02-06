@@ -19,7 +19,7 @@
     "/profile/new": {
       "post": {
         "summary": "Criação de Perfis",
-        "description": "Endpoint responsável pela criação de perfis",
+        "description": "Endpoint responsável pela criação de perfis.",
         "tags": ["Profile"],
         "requestBody": {
           "content": {
@@ -84,7 +84,7 @@
     "/users/new": {
       "post": {
         "summary": "Cadastro de usuários",
-        "description": "O usuário poderá cadastrar seus dados e então serão vinculados seu perfil",
+        "description": "O usuário poderá cadastrar seus dados e então serão vinculados seu perfil.",
         "tags": ["Users"],
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
@@ -124,8 +124,8 @@
     },
     "/users": {
       "get": {
-        "summary": "Visualizar dados dos usuários - Somente Admin",
-        "description": "Retorna dados dos usuários cadastrados utilizando paginação, com até 10 resultados por página. \n\n Por padão GET /users retorna os dados dos 10 primeiros usuários correspondendo a primeira página. \n\n Isto é equivalente a GET /users?page=1, então GET /users?page=2 retornará a segunda página e assim por diante",
+        "summary": "Visualizar dados dos usuários - Requer nível de acesso admin",
+        "description": "Retorna dados dos usuários cadastrados utilizando paginação, com até 10 resultados por página. \n\n Por padão GET /users retorna os dados dos 10 primeiros usuários correspondendo a primeira página. \n\n Isto é equivalente a GET /users?page=1, então GET /users?page=2 retornará a segunda página e assim por diante.",
         "tags": ["Users"],
         "security": [{ "bearerAuth": [] }],
         "parameters": [
@@ -145,7 +145,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UserDataAndProfle"
+                    "$ref": "#/components/schemas/UserDataAndProfile"
                   }
                 }
               }
@@ -162,8 +162,8 @@
     },
     "/users/{userId}": {
       "get": {
-        "summary": "Visualizar dados de um usuário buscando pelo id - Somente Admin",
-        "description": "Retorna os dados de um usuário específico juntament com irformações do seu perfil",
+        "summary": "Visualizar dados de um usuário buscando pelo id - Requer nível de acesso admin",
+        "description": "Retorna os dados de um usuário específico juntament com irformações do seu perfil.",
         "tags": ["Users"],
         "security": [{ "bearerAuth": [] }],
         "parameters": [
@@ -181,7 +181,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDataAndProfle"
+                  "$ref": "#/components/schemas/UserDataAndProfile"
                 }
               }
             }
@@ -191,6 +191,56 @@
           },
           "404": {
             "description": "User not found"
+          }
+        }
+      }
+    },
+    "/users/update/{userId}": {
+      "put": {
+        "summary": "Atualiza os dados de um usuário - Requer nível de acesso admin",
+        "description": "Um admin poderá atualizar os dados de um usuário especificado pelo id.",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "Id do usuário de que se deseja obter os dados.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDataAndProfile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validations fails"
+          },
+          "401": {
+            "description": "Not sent or invalid token or user isn't an admin"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "422": {
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -275,7 +325,7 @@
           }
         }
       },
-      "UserDataAndProfle": {
+      "UserDataAndProfile": {
         "type": "object",
         "properties": {
           "name": {
@@ -311,6 +361,36 @@
                 "description": "Access level"
               }
             }
+          }
+        }
+      },
+      "UpdateUserData": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Xablau da Silva",
+            "required": false
+          },
+          "phone": {
+            "type": "string",
+            "example": "11999999999 or (11)99999-9999",
+            "required": false
+          },
+          "email": {
+            "type": "string",
+            "example": "xablau@email.com",
+            "required": false
+          },
+          "cpf": {
+            "type": "string",
+            "example": "127.932.196-05",
+            "required": false
+          },
+          "role": {
+            "type": "string",
+            "example": "user or admin",
+            "required": false
           }
         }
       }
