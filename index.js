@@ -41,17 +41,17 @@ app.delete('/stores/delete/:id', authMiddleware, adminRequired, deleteStore);
 
 app.get('/stores', authMiddleware, findStores);
 
-app.get('/users', authMiddleware, adminRequired, findAllUsers);
+app.get('/users', authMiddleware, adminRequired, findAllUsers); // Documentado
 
-app.get('/users/:id', authMiddleware, adminRequired, findUserById);
+app.get('/users/:id', authMiddleware, adminRequired, findUserById); // Documentado
 
-app.post('/login', login);
+app.post('/login', login); // Documentado
 
-app.post('/profile/new', createProfile);
+app.post('/profile/new', createProfile); // Documentado
 
 app.post('/stores/new', authMiddleware, adminRequired, createStore);
 
-app.post('/users/new', authMiddleware, createUser);
+app.post('/users/new', authMiddleware, createUser); // Documentado
 
 app.put('/stores/update/:id', authMiddleware, adminRequired, updateStore);
 

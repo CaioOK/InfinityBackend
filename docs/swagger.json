@@ -159,6 +159,41 @@
           }
         }
       }
+    },
+    "/users/{userId}": {
+      "get": {
+        "summary": "Visualizar dados de um usuário buscando pelo id - Somente Admin",
+        "description": "Retorna os dados de um usuário específico juntament com irformações do seu perfil",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "Id do usuário de que se deseja obter os dados",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDataAndProfle"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not sent or invalid token or user isn't an admin"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
     }
   },
   "components": {
