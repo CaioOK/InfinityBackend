@@ -31,7 +31,7 @@ const app = express();
 const PORT = process.env.NODE_ENV === 'test' ? 3001 : process.env.PORT;
 
 app.use(bodyParser.json());
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.get('/', (_req, res) => {
   res.status(200).json({ message: 'Servidor funcionando!' });
