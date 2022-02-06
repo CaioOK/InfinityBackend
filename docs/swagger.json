@@ -83,7 +83,7 @@
     },
     "/users/new": {
       "post": {
-        "Summary": "Cadastro de usuários",
+        "summary": "Cadastro de usuários",
         "description": "Faz o cadastro de dados de um usuário que possui um perfil criado",
         "tags": ["Users"],
         "security": [{ "bearerAuth": [] }],
