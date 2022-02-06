@@ -390,6 +390,34 @@
           }
         }
       }
+    },
+    "/stores/delete/{storeId}" : {
+      "delete": {
+        "summary": "Excluir loja - Requer nível de acesso admin",
+        "description": "Um admin poderá excluir o cadastro de uma loja especificada pelo id.",
+        "tags": ["Stores"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "Id da loja de que se deseja atualizar os dados.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "401": {
+            "description": "Not sent or invalid token or user isn't an admin"
+          },
+          "404": {
+            "description": "Store not found"
+          }
+        }
+      }
     }
   },
   "components": {

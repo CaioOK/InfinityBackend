@@ -33,29 +33,25 @@ const PORT = process.env.NODE_ENV === 'test' ? 3001 : process.env.PORT;
 app.use(bodyParser.json());
 app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.get('/', (_req, res) => {
-  res.status(200).json({ message: 'Servidor funcionando!' });
-});
-
 app.delete('/stores/delete/:id', authMiddleware, adminRequired, deleteStore);
 
-app.get('/stores', authMiddleware, findStores); // Documentado
+app.get('/stores', authMiddleware, findStores);
 
-app.get('/users', authMiddleware, adminRequired, findAllUsers); // Documentado
+app.get('/users', authMiddleware, adminRequired, findAllUsers);
 
-app.get('/users/:id', authMiddleware, adminRequired, findUserById); // Documentado
+app.get('/users/:id', authMiddleware, adminRequired, findUserById);
 
-app.post('/login', login); // Documentado
+app.post('/login', login);
 
-app.post('/profile/new', createProfile); // Documentado
+app.post('/profile/new', createProfile);
 
-app.post('/stores/new', authMiddleware, adminRequired, createStore); // Documentado
+app.post('/stores/new', authMiddleware, adminRequired, createStore);
 
-app.post('/users/new', authMiddleware, createUser); // Documentado
+app.post('/users/new', authMiddleware, createUser);
 
-app.put('/stores/update/:id', authMiddleware, adminRequired, updateStore); // Documentado
+app.put('/stores/update/:id', authMiddleware, adminRequired, updateStore);
 
-app.put('/users/update/:id', authMiddleware, adminRequired, updateAnUser); // Documentado
+app.put('/users/update/:id', authMiddleware, adminRequired, updateAnUser);
 
 app.use(errorMiddleware);
 
