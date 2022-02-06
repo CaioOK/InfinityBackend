@@ -285,6 +285,58 @@
           }
         }
       }
+    },
+    "/stores": {
+      "get": {
+        "summary": "Visualizar lojas cadastradas",
+        "description": "Retorna dados das lojas cadastrados utilizando paginação, com até 10 resultados por página. \n\n Por padão GET /stores retorna os dados das 10 primeiras lojas correspondendo a primeira página. \n\n Isto é equivalente a GET /stores?page=1, então GET /stores?page=2 retornará a segunda página e assim por diante.",
+        "tags": ["Stores"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Number of page",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Filter by name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Filter by category",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StoreDataAndCategory"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect page number"
+          },
+          "401": {
+            "description": "Not sent or invalid token"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -461,6 +513,49 @@
             "type": "string",
             "example": "https://pbs.twimg.com/profile_images/975095764803309568/TGZU72J4_400x400.jpg",
             "description": "Link of logo"
+          }
+        }
+      },
+      "StoreDataAndCategory": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1,
+            "description": "Store id"
+          },
+          "name": {
+            "type": "string",
+            "example": "Ricardão Eletro",
+            "description": "Must be unique"
+          },
+          "description": {
+            "type": "string",
+            "example": "Aqui tem de tudo pra sua casa e esposa"
+          },
+          "localization": {
+            "type": "string",
+            "example": "-1.5423595, 1.41435143",
+            "description": "Must be unique"
+          },
+          "categoryId": {
+            "type": "integer",
+            "example": 2,
+            "description": "Id of an existing category"
+          },
+          "logo": {
+            "type": "string",
+            "example": "https://pbs.twimg.com/profile_images/975095764803309568/TGZU72J4_400x400.jpg",
+            "description": "Link of logo"
+          },
+          "category": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Agropecuária"
+              }
+            }
           }
         }
       }

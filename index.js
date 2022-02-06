@@ -39,7 +39,7 @@ app.get('/', (_req, res) => {
 
 app.delete('/stores/delete/:id', authMiddleware, adminRequired, deleteStore);
 
-app.get('/stores', authMiddleware, findStores);
+app.get('/stores', authMiddleware, findStores); // Documentado
 
 app.get('/users', authMiddleware, adminRequired, findAllUsers); // Documentado
 
