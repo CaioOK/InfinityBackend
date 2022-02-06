@@ -65,9 +65,6 @@
           }
         },
         "responses": {
-          "400": {
-            "description": "Email or password incorrect"
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -77,6 +74,47 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Email or password incorrect"
+          }
+        }
+      }
+    },
+    "/users/new": {
+      "post": {
+        "Summary": "Cadastro de usuários",
+        "description": "Faz o cadastro de dados de um usuário que possui um perfil criado",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewUser"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid name, email, phone or cpf"
+          },
+          "401": {
+            "description": "Not sent or invalid token"
+          },
+          "409": {
+            "description": "\"User already registered\""
           }
         }
       }
@@ -137,6 +175,27 @@
           "token": {
             "type": "string",
             "example": "eyJhbGciOiJI2zI1NiIsI2R5cCI6IkpXVwJ9.eyJpZCI6MSwiZl1haWwiOiJtcnJvYm90QGVjb3JwLnVzIiwicm9sZSI6ImFkbWluIiwiaWFoIjoxNjQzOTkzNzE4LCJleHAiOjE2NDQwODAxMTh9\n.tp4UdUTE5Ktjgcv3KG9C254ajiuvVzC_0xOzu52ApGE"
+          }
+        }
+      },
+      "NewUser": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Xablau da Silva"
+          },
+          "phone": {
+            "type": "string",
+            "example": "11999999999 or (11)99999-9999"
+          },
+          "email": {
+            "type": "string",
+            "example": "xablau@email.com"
+          },
+          "cpf": {
+            "type": "string",
+            "example": "127.932.196-05"
           }
         }
       }
