@@ -1,0 +1,93 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Infinity API",
+    "description": "Api de gerenciamento de usuários e lojas, com recurso de criação de perfis e autenticação com token jwt",
+    "termsOfService": "http://google.com",
+    "contact": {
+      "email": "caiodioliveira@hotmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Production API"
+    }
+  ],
+  "paths": {
+    "/profile/new": {
+      "post": {
+        "summary": "Criação de Perfis",
+        "description": "Endpoint responsável pela criação de perfis",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewProfileRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/NewProfileResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validations fails like \"email must be a valid email\" or \"password length must be at least 6 characters long\""
+          },
+          "409": {
+            "description": "\"User already registered\""
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NewProfileRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "xablau@email.com",
+            "description": "must be a valid email"
+          },
+          "password": {
+            "type": "string",
+            "example": "123456",
+            "description": "length must be at least 6 characteres"
+          }
+        }
+      },
+      "NewProfileResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "description": "user by default"
+          },
+          "token": {
+            "type": "string",
+            "description": "token jwt"
+          }
+        }
+      }
+    }
+  }
+}
