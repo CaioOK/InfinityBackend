@@ -244,6 +244,47 @@
           }
         }
       }
+    },
+    "/stores/new": {
+      "post": {
+        "summary": "Cadastro de lojas - Requer nível de acesso admin",
+        "description": "Um admin poderá cadastrar uma nova loja.",
+        "tags": ["Stores"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation fails"
+          },
+          "401": {
+            "description": "Not sent or invalid token"
+          },
+          "409": {
+            "description": "Store name or localization already registered"
+          },
+          "404": {
+            "description": "Category not found"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -391,6 +432,35 @@
             "type": "string",
             "example": "user or admin",
             "required": false
+          }
+        }
+      },
+      "StoreData": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Ricardão Eletro",
+            "description": "Must be unique"
+          },
+          "description": {
+            "type": "string",
+            "example": "Aqui tem de tudo pra sua casa e esposa"
+          },
+          "localization": {
+            "type": "string",
+            "example": "-1.5423595, 1.41435143",
+            "description": "Must be unique"
+          },
+          "categoryId": {
+            "type": "integer",
+            "example": 1,
+            "description": "Id of an existing category"
+          },
+          "logo": {
+            "type": "string",
+            "example": "https://pbs.twimg.com/profile_images/975095764803309568/TGZU72J4_400x400.jpg",
+            "description": "Link of logo"
           }
         }
       }

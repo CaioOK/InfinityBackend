@@ -49,7 +49,7 @@ app.post('/login', login); // Documentado
 
 app.post('/profile/new', createProfile); // Documentado
 
-app.post('/stores/new', authMiddleware, adminRequired, createStore);
+app.post('/stores/new', authMiddleware, adminRequired, createStore); // Documentado
 
 app.post('/users/new', authMiddleware, createUser); // Documentado
 
