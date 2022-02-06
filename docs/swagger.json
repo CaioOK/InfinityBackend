@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000",
+      "url": "https://infinity-brasil-api.herokuapp.com/",
       "description": "Production API"
     }
   ],
@@ -108,13 +108,16 @@
             }
           },
           "400": {
-            "description": "Invalid name, email, phone or cpf"
+            "description": "Invalid name or email"
           },
           "401": {
             "description": "Not sent or invalid token"
           },
           "409": {
             "description": "\"User already registered\""
+          },
+          "422": {
+            "description": "Incorrect phone or cpf format"
           }
         }
       }
