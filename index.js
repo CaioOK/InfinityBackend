@@ -53,7 +53,7 @@ app.post('/stores/new', authMiddleware, adminRequired, createStore); // Document
 
 app.post('/users/new', authMiddleware, createUser); // Documentado
 
-app.put('/stores/update/:id', authMiddleware, adminRequired, updateStore);
+app.put('/stores/update/:id', authMiddleware, adminRequired, updateStore); // Documentado
 
 app.put('/users/update/:id', authMiddleware, adminRequired, updateAnUser); // Documentado
 

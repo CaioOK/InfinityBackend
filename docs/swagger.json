@@ -337,6 +337,59 @@
           }
         }
       }
+    },
+    "/stores/update/{storeId}": {
+      "put": {
+        "summary": "Atualiza os dados de uma loja - Requer nível de acesso admin",
+        "description": "Um admin poderá atualizar os dados de uma loja especificada pelo id.",
+        "tags": ["Stores"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "Id da loja de que se deseja atualizar os dados.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreDataAndCategory"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validations fails"
+          },
+          "401": {
+            "description": "Not sent or invalid token or user isn't an admin"
+          },
+          "404": {
+            "description": "Store or category not found"
+          },
+          "409": {
+            "description": "Store name or localization already registered"
+          },
+          "422": {
+            "description": "You must provide at least onde field"
+          }
+        }
+      }
     }
   },
   "components": {
