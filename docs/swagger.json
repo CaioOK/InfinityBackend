@@ -36,7 +36,6 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
                   "$ref": "#/components/schemas/NewProfileResponse"
                 }
               }
@@ -47,6 +46,37 @@
           },
           "409": {
             "description": "\"User already registered\""
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Login",
+        "description": "Endpoint responsável por iniciar uma nova sessão para o usuário e retornar um token jwt",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Email or password incorrect"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -87,6 +117,35 @@
             "description": "token jwt"
           }
         }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "xablau@email.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "123456"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJI2zI1NiIsI2R5cCI6IkpXVwJ9.eyJpZCI6MSwiZl1haWwiOiJtcnJvYm90QGVjb3JwLnVzIiwicm9sZSI6ImFkbWluIiwiaWFoIjoxNjQzOTkzNzE4LCJleHAiOjE2NDQwODAxMTh9\n.tp4UdUTE5Ktjgcv3KG9C254ajiuvVzC_0xOzu52ApGE"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
